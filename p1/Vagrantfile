@@ -1,0 +1,40 @@
+ENV['VAGRANT_DEFAULT_PROVIDER'] ||= 'libvirt'
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "generic/debian12"
+  config.vm.box_check_update = false
+
+  config.vm.provider "virtualbox" do |vb|
+    vb.memory = "512"
+    vb.cpus = 1
+  end
+
+  config.vm.provider "libvirt" do |lv|
+    lv.memory = 512
+    lv.cpus = 1
+  end
+
+  # Server
+  config.vm.define "saal-kurS" do |server|
+    server.vm.hostname = "saal-kurS"
+    server.vm.network "private_network", ip: "192.168.56.110"
+    
+    server.vm.provider "virtualbox" do |vb|
+      vb.name = "saal-kurS"
+    end
+
+    server.vm.provision "shell", path: "scripts/server.sh"
+  end
+
+  # ServerWorker
+  config.vm.define "saal-kurSW" do |worker|
+    worker.vm.hostname = "saal-kurSW"
+    worker.vm.network "private_network", ip: "192.168.56.111"
+    
+    worker.vm.provider "virtualbox" do |vb|
+      vb.name = "saal-kurSW"
+    end
+
+    worker.vm.provision "shell", path: "scripts/worker.sh"
+  end
+end
