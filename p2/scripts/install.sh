@@ -45,7 +45,7 @@ fi
 k3s kubectl wait \
   --for=condition=Ready nodes --all --timeout=180s
 
-k3s kubectl apply -f /vagrant/confs/
+k3s kubectl apply -f /tmp/configs/
 
 for app in app1 app2 app3; do
   k3s kubectl rollout status \
